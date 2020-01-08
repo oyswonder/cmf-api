@@ -9,7 +9,7 @@
         }
     ],
     "require": {
-        "oyswonder/cmf": "~5.1.0"
+        "oyswonder/cmf": "5.1.x-dev"
     },
     "autoload": {
         "psr-4": {
