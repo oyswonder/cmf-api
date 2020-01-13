@@ -176,7 +176,7 @@ class PublicController extends RestBaseController
         if (empty($result)) {
             $this->error("登录失败!");
         }
-
+        unset($findUser['user_pass']);
         $this->success("登录成功!", ['token' => $token, 'user' => $findUser]);
     }
 
