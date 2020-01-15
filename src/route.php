@@ -18,10 +18,10 @@ foreach ($apps as $app) {
     }
 }
 
-$coreApps = cmf_scan_dir(CMF_ROOT . 'vendor/thinkcmf/cmf-api/src/*', GLOB_ONLYDIR);
+$coreApps = cmf_scan_dir(CMF_ROOT . 'vendor/'.CMF_VENDOR.'/cmf-api/src/*', GLOB_ONLYDIR);
 
 foreach ($coreApps as $app) {
-    $routeFile = CMF_ROOT . 'vendor/thinkcmf/cmf-api/src/' . $app . '/route.php';
+    $routeFile = CMF_ROOT . 'vendor/'.CMF_VENDOR.'/cmf-api/src/' . $app . '/route.php';
 
     if (file_exists($routeFile)) {
         include_once $routeFile;
