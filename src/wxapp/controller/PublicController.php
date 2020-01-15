@@ -27,11 +27,11 @@ class PublicController extends RestBaseController
         ]);
 
         $validate->message([
-            'code.require'           => '缺少参数code!',
-            'encrypted_data.require' => '缺少参数encrypted_data!',
-            'iv.require'             => '缺少参数iv!',
-            'raw_data.require'       => '缺少参数raw_data!',
-            'signature.require'      => '缺少参数signature!',
+            'code.require'           => 'Missing parameter code!',
+            'encrypted_data.require' => 'Missing parameter encrypted_data!',
+            'iv.require'             => 'Missing parameter iv!',
+            'raw_data.require'       => 'Missing parameter raw_data!',
+            'signature.require'      => 'Missing parameter signature!',
         ]);
 
         $data = $this->request->param();
@@ -45,7 +45,7 @@ class PublicController extends RestBaseController
         $appId = $this->request->header('XX-Wxapp-AppId');
         if (empty($appId)) {
             if (empty($wxappSettings['default'])) {
-                $this->error('没有设置默认小程序！');
+                $this->error('No default WXAPP set');
             } else {
                 $defaultWxapp = $wxappSettings['default'];
                 $appId        = $defaultWxapp['app_id'];
@@ -53,7 +53,7 @@ class PublicController extends RestBaseController
             }
         } else {
             if (empty($wxappSettings['wxapps'][$appId])) {
-                $this->error('小程序设置不存在！');
+                $this->error('WXAPP settings do not exist!');
             } else {
                 $appId     = $wxappSettings['wxapps'][$appId]['app_id'];
                 $appSecret = $wxappSettings['wxapps'][$appId]['app_secret'];
@@ -65,7 +65,7 @@ class PublicController extends RestBaseController
 
         $response = json_decode($response, true);
         if (!empty($response['errcode'])) {
-            $this->error('操作失败!');
+            $this->error('Operation failed!');
         }
 
         $openid     = $response['openid'];
@@ -75,7 +75,7 @@ class PublicController extends RestBaseController
         $errCode = $pc->decryptData($data['encrypted_data'], $data['iv'], $wxUserData);
 
         if ($errCode != 0) {
-            $this->error('操作失败!');
+            $this->error('Operation failed!');
         }
 
         $findThirdPartyUser = Db::name("third_party_user")
@@ -143,7 +143,7 @@ class PublicController extends RestBaseController
 
         $user = Db::name('user')->where('id', $userId)->find();
 
-        $this->success("登录成功!", ['token' => $token, 'user' => $user]);
+        $this->success('Login successful', ['token' => $token, 'user' => $user]);
 
 
     }

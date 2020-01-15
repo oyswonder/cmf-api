@@ -29,7 +29,7 @@ class CoinController extends RestUserBaseController
             'coin'    => ['neq', 0]
         ])->order('create_time DESC')->paginate();
 
-        $this->success('请求成功', ['list' => $logs->items()]);
+        $this->success('Request successful', ['list' => $logs->items()]);
     }
 
 }

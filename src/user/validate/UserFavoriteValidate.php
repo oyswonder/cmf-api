@@ -24,10 +24,10 @@ class UserFavoriteValidate extends Validate
         'title'      => 'require'
     ];
     protected $message = [
-        'object_id.require'  => '请填写内容ID',
-        'table_name.require' => '请填写内容ID所在表名不带前缀',
-        'url.require'        => '请填写内容url',
-        'title.require'      => '请填写内容标题'
+        'object_id.require'  => 'Please fill in the content ID',
+        'table_name.require' => 'Please fill in the table name (no prefix required)',
+        'url.require'        => 'Please fill in the URL',
+        'title.require'      => 'Please fill in the title'
     ];
 
     protected $scene = [

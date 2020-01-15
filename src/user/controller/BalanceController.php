@@ -29,7 +29,7 @@ class BalanceController extends RestUserBaseController
         $balanceModel = new UserBalanceLogModel();
         $result       = $balanceModel->where(['user_id' => $userId])->order('create_time desc')->paginate();
 
-        $this->success('请求成功', ['list' => $result->items()]);
+        $this->success('Request successful', ['list' => $result->items()]);
     }
 
     /**
@@ -53,7 +53,7 @@ class BalanceController extends RestUserBaseController
         $findToUser = $userModel->where('id', $toUserId)->find();
 
         if (empty($findToUser)) {
-            $this->error('收款人不存在！');
+            $this->error('The payee does not exist!');
         }
 
         $userModel->startTrans();
@@ -92,17 +92,17 @@ class BalanceController extends RestUserBaseController
         } catch (\Exception $e) {
             $userModel->rollback();
 
-            $this->error('操作失败！');
+            $this->error('Operation failed!');
         }
 
         if ($error > 0) {
             switch ($error) {
                 case 1:
-                    $this->error('余额不足');
+                    $this->error('Balance is not enough！');
                     break;
             }
         } else {
-            $this->success('转账成功！');
+            $this->success('Successful');
         }
     }
 

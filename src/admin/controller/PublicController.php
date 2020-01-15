@@ -23,8 +23,8 @@ class PublicController extends RestBaseController
             'password' => 'require'
         ]);
         $validate->message([
-            'username.require' => '请输入手机号,邮箱或用户名!',
-            'password.require' => '请输入您的密码!'
+            'username.require' => 'Please enter your mobile, email or username!',
+            'password.require' => 'Password cannot be empty!'
         ]);
 
         $data = $this->request->param();
@@ -44,25 +44,25 @@ class PublicController extends RestBaseController
         $findUser = $userQuery->find();
 
         if (empty($findUser)) {
-            $this->error("用户不存在!");
+            $this->error('User does not exist!');
         } else {
 
             switch ($findUser['user_status']) {
                 case 0:
-                    $this->error('您已被拉黑!');
+                    $this->error('You have been blocked!');
                 case 2:
-                    $this->error('账户还没有验证成功!');
+                    $this->error('Account has not been verified!');
             }
 
             if (!cmf_compare_password($data['password'], $findUser['user_pass'])) {
-                $this->error("密码不正确!");
+                $this->error('The password is incorrect!');
             }
         }
 
         $allowedDeviceTypes = ['mobile', 'android', 'iphone', 'ipad', 'web', 'pc', 'mac'];
 
         if (empty($this->deviceType) && (empty($data['device_type']) || !in_array($data['device_type'], $this->allowedDeviceTypes))) {
-            $this->error("请求错误,未知设备!");
+            $this->error('Request error, unknown device!');
         } else if(!empty($data['device_type'])) {
             $this->deviceType = $data['device_type'];
         }
@@ -95,10 +95,10 @@ class PublicController extends RestBaseController
 
 
         if (empty($result)) {
-            $this->error("登录失败!");
+            $this->error('Login failed');
         }
 
-        $this->success("登录成功!", ['token' => $token]);
+        $this->success('Login successfully', ['token' => $token]);
     }
 
     // 管理员退出
@@ -111,7 +111,7 @@ class PublicController extends RestBaseController
             'device_type' => $this->deviceType
         ])->update(['token' => '']);
 
-        $this->success("退出成功!");
+        $this->success('Logout successfully');
     }
 
 }

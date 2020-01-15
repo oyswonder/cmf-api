@@ -28,7 +28,7 @@ class SlidesController extends RestBaseController
         //slide为空或不存在抛出异常
         $id = $this->request->param('id', 0, 'intval');
         if (empty($id)) {
-            $this->error('缺少ID参数');
+            $this->error('Parameter error');
         }
 
         $map['id']    = $id;
@@ -36,7 +36,7 @@ class SlidesController extends RestBaseController
         $data         = $slideService->SlideList($map);
         //剔除分类状态隐藏 剔除分类下显示数据为空
         if (empty($data) || $data['items']->isEmpty()) {
-            $this->error('该组幻灯片显示数据为空');
+            $this->error('This slide has no displayable data');
         }
 
         if (empty($this->apiVersion) || $this->apiVersion == '1.0.0') {
@@ -45,7 +45,7 @@ class SlidesController extends RestBaseController
             $response = $data;
         }
 
-        $this->success("该组幻灯片获取成功!", $response);
+        $this->success('Success', $response);
     }
 
 }

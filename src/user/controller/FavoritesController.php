@@ -41,9 +41,9 @@ class FavoritesController extends RestBaseController
             $response = ['list' => $favoriteData,];
         }
         if ($favoriteData->isEmpty()) {
-            $this->error('您没有收藏的数据！');
+            $this->error('You have no favorite data!');
         }
-        $this->success('请求成功', $response);
+        $this->success('Request successful', $response);
     }
 
     /**
@@ -64,14 +64,14 @@ class FavoritesController extends RestBaseController
             ->where('table_name', $data['table_name'])
             ->count();
         if ($count > 0) {
-            $this->error('已收藏', ['code' => 1]);
+            $this->error('Already in favorites', ['code' => 1]);
         }
         $data['user_id'] = $this->getUserId();
         $favoriteId      = $userFavoriteModel->addFavorite($data);
         if ($favoriteId) {
-            $this->success('收藏成功', ['id' => $userFavoriteModel->id]);
+            $this->success('success', ['id' => $userFavoriteModel->id]);
         } else {
-            $this->error('收藏失败');
+            $this->error('failure');
         }
 
     }
@@ -89,12 +89,12 @@ class FavoritesController extends RestBaseController
         $count             = $userFavoriteModel->where(['id' => $id, 'user_id' => $userId])->count();
 
         if ($count == 0) {
-            $this->error('收藏不存在,无法取消');
+            $this->error('Item does not exist');
         }
 
         $userFavoriteModel->where(['id' => $id])->delete();
 
-        $this->success('取消成功');
+        $this->success('success');
 
     }
 
@@ -112,8 +112,8 @@ class FavoritesController extends RestBaseController
             'object_id'  => 'require',
             'table_name' => 'require'
         ], [
-            'object_id.require'  => '请输出内容ID',
-            'table_name.require' => '请输出内容ID所在表名不带前缀'
+            'object_id.require'  => 'Please fill in the content ID',
+            'table_name.require' => 'Please fill in the table name (no prefix required)'
         ]);
 
         if (!$validate->check($input)) {
@@ -123,7 +123,7 @@ class FavoritesController extends RestBaseController
         $userId = $this->userId;
 
         if (empty($this->userId)) {
-            $this->error('用户登录');
+            $this->error('User is not logged in!');
         }
 
         $userFavoriteModel = new UserFavoriteModel();
@@ -136,7 +136,7 @@ class FavoritesController extends RestBaseController
         if ($findFavorite) {
             $this->success('success', $findFavorite);
         } else {
-            $this->error('用户未收藏');
+            $this->error('Not added to favorites yet');
         }
 
     }

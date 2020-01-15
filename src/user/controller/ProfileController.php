@@ -28,10 +28,10 @@ class ProfileController extends RestUserBaseController
         ]);
 
         $validate->message([
-            'old_password.require'     => '请输入您的旧密码!',
-            'password.require'         => '请输入您的新密码!',
-            'confirm_password.require' => '请输入确认密码!',
-            'confirm_password.confirm' => '两次输入的密码不一致!'
+            'old_password.require'     => 'Please enter your old password!',
+            'password.require'         => 'Please enter your new password!',
+            'confirm_password.require' => 'Please enter your confirm password!',
+            'confirm_password.confirm' => 'New password and confirm password are inconsistent!'
         ]);
 
         $data = $this->request->param();
@@ -43,12 +43,12 @@ class ProfileController extends RestUserBaseController
         $userPassword = Db::name("user")->where('id', $userId)->value('user_pass');
 
         if (!cmf_compare_password($data['old_password'], $userPassword)) {
-            $this->error('旧密码不正确!');
+            $this->error('The old password is incorrect!');
         }
 
         Db::name("user")->where('id', $userId)->update(['user_pass' => cmf_password($data['password'])]);
 
-        $this->success("密码修改成功!");
+        $this->success("success!");
 
     }
 
@@ -68,10 +68,10 @@ class ProfileController extends RestUserBaseController
         ]);
 
         $validate->message([
-            'email.require'             => '请输入您的邮箱!',
-            'email.email'               => '请输入正确的邮箱格式!',
-            'email.unique'              => '邮箱账号已存在!',
-            'verification_code.require' => '请输入数字验证码!'
+            'email.require'             => 'Please enter the email you want to bind!',
+            'email.email'               => 'Please enter the correct email!',
+            'email.unique'              => 'Email account already exists!',
+            'verification_code.require' => 'Please enter the verification code!'
         ]);
 
         $data = $this->request->param();
@@ -83,7 +83,7 @@ class ProfileController extends RestUserBaseController
         $userEmail = Db::name("user")->where('id', $userId)->value('user_email');
 
         if (!empty($userEmail)) {
-            $this->error("您已经绑定邮箱!");
+            $this->error('You have bound your email!');
         }
 
         $errMsg = cmf_check_verification_code($data['email'], $data['verification_code']);
@@ -93,7 +93,7 @@ class ProfileController extends RestUserBaseController
 
         Db::name("user")->where('id', $userId)->update(['user_email' => $data['email']]);
 
-        $this->success("绑定成功!");
+        $this->success('success');
     }
 
     /**
@@ -112,9 +112,9 @@ class ProfileController extends RestUserBaseController
         ]);
 
         $validate->message([
-            'mobile.require'            => '请输入您的手机号!',
-            'mobile.unique'             => '手机号已经存在！',
-            'verification_code.require' => '请输入数字验证码!'
+            'mobile.require'            => 'Please enter the mobile you want to bind!',
+            'mobile.unique'             => 'Mobile account already exists!',
+            'verification_code.require' => 'Please enter the verification code!'
         ]);
 
         $data = $this->request->param();
@@ -123,7 +123,7 @@ class ProfileController extends RestUserBaseController
         }
 
         if (!cmf_check_mobile($data['mobile'])) {
-            $this->error("请输入正确的手机格式!");
+            $this->error('Please enter the correct mobile number!');
         }
 
 
@@ -131,7 +131,7 @@ class ProfileController extends RestUserBaseController
         $mobile = Db::name("user")->where('id', $userId)->value('mobile');
 
         if (!empty($mobile)) {
-            $this->error("您已经绑定手机!");
+            $this->error('You have bound your mobile!');
         }
 
         $errMsg = cmf_check_verification_code($data['mobile'], $data['verification_code']);
@@ -141,7 +141,7 @@ class ProfileController extends RestUserBaseController
 
         Db::name("user")->where('id', $userId)->update(['mobile' => $data['mobile']]);
 
-        $this->success("绑定成功!");
+        $this->success('success');
     }
 
     /**
@@ -166,7 +166,7 @@ class ProfileController extends RestUserBaseController
                 $postFieldArr = explode(',', $field);
                 $mixedField   = array_intersect($fieldArr, $postFieldArr);
                 if (empty($mixedField)) {
-                    $this->error('您查询的信息不存在！');
+                    $this->error('The information you query does not exist!');
                 }
                 if (count($mixedField) > 1) {
                     $fieldStr = implode(',', $mixedField);
@@ -175,7 +175,7 @@ class ProfileController extends RestUserBaseController
                     $userData = Db::name("user")->where('id', $userId)->value($mixedField);
                 }
             }
-            $this->success('获取成功！', $userData);
+            $this->success('success', $userData);
         }
         //判断请求为POST,修改信息
         if ($this->request->isPost()) {
@@ -183,7 +183,7 @@ class ProfileController extends RestUserBaseController
             $fieldStr = 'user_nickname,avatar,signature,user_url,sex,birthday';
             $data     = $this->request->post();
             if (empty($data)) {
-                $this->error('修改失败，提交表单为空！');
+                $this->error('Parameter error!');
             }
 
             if (!empty($data['birthday'])) {
@@ -192,11 +192,10 @@ class ProfileController extends RestUserBaseController
 
             $upData = Db::name("user")->where('id', $userId)->field($fieldStr)->update($data);
             if ($upData !== false) {
-                $this->success('修改成功！');
+                $this->success('success');
             } else {
-                $this->error('修改失败！');
+                $this->error('failure!');
             }
         }
     }
-
 }

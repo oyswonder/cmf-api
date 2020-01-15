@@ -31,9 +31,9 @@ class PublicController extends RestBaseController
         ]);
 
         $validate->message([
-            'username.require'          => '请输入手机号,邮箱!',
-            'password.require'          => '请输入您的密码!',
-            'verification_code.require' => '请输入数字验证码!'
+            'username.require'          => 'Please enter your mobile or email!',
+            'password.require'          => 'Please enter your password!',
+            'verification_code.require' => 'Please enter the verification code!'
         ]);
 
         $data = $this->request->param();
@@ -52,7 +52,7 @@ class PublicController extends RestBaseController
             $user['mobile']          = $data['username'];
             $findUserWhere['mobile'] = $data['username'];
         } else {
-            $this->error("请输入正确的手机或者邮箱格式!");
+            $this->error('Please enter the correct mobile number or email address!');
         }
 
         $errMsg = cmf_check_verification_code($data['username'], $data['verification_code']);
@@ -63,7 +63,7 @@ class PublicController extends RestBaseController
         $findUserCount = Db::name("user")->where($findUserWhere)->count();
 
         if ($findUserCount > 0) {
-            $this->error("此账号已存在!");
+            $this->error('This account has been registered!');
         }
 
         $user['create_time'] = time();
@@ -75,10 +75,10 @@ class PublicController extends RestBaseController
 
 
         if (empty($result)) {
-            $this->error("注册失败,请重试!");
+            $this->error('registration failed!');
         }
 
-        $this->success("注册并激活成功,请登录!");
+        $this->success('Registered successfully');
 
     }
 
@@ -98,8 +98,8 @@ class PublicController extends RestBaseController
             'password' => 'require'
         ]);
         $validate->message([
-            'username.require' => '请输入手机号,邮箱或用户名!',
-            'password.require' => '请输入您的密码!'
+            'username.require' => 'Please enter your mobile or email!',
+            'password.require' => 'Please enter your password!'
         ]);
 
         $data = $this->request->param();
@@ -120,25 +120,25 @@ class PublicController extends RestBaseController
         $findUser = Db::name("user")->where($findUserWhere)->find();
 
         if (empty($findUser)) {
-            $this->error("用户不存在!");
+            $this->error('User does not exist!');
         } else {
 
             switch ($findUser['user_status']) {
                 case 0:
-                    $this->error('您已被拉黑!');
+                    $this->error('You have been blocked!');
                 case 2:
-                    $this->error('账户还没有验证成功!');
+                    $this->error('Account has not been verified!');
             }
 
             if (!cmf_compare_password($data['password'], $findUser['user_pass'])) {
-                $this->error("密码不正确!");
+                $this->error('The password is incorrect');
             }
         }
 
         $allowedDeviceTypes = $this->allowedDeviceTypes;
 
         if (empty($this->deviceType) && (empty($data['device_type']) || !in_array($data['device_type'], $this->allowedDeviceTypes))) {
-            $this->error("请求错误,未知设备!");
+            $this->error('Request error, unknown device!');
         } else if(!empty($data['device_type'])) {
             $this->deviceType = $data['device_type'];
         }
@@ -174,10 +174,10 @@ class PublicController extends RestBaseController
 
 
         if (empty($result)) {
-            $this->error("登录失败!");
+            $this->error('Login failed!');
         }
         unset($findUser['user_pass']);
-        $this->success("登录成功!", ['token' => $token, 'user' => $findUser]);
+        $this->success('Login successfully', ['token' => $token, 'user' => $findUser]);
     }
 
     /**
@@ -194,7 +194,7 @@ class PublicController extends RestBaseController
             'device_type' => $this->deviceType
         ])->update(['token' => '']);
 
-        $this->success("退出成功!");
+        $this->success('Logout successfully!');
     }
 
     /**
@@ -214,9 +214,9 @@ class PublicController extends RestBaseController
         ]);
 
         $validate->message([
-            'username.require'          => '请输入手机号,邮箱!',
-            'password.require'          => '请输入您的密码!',
-            'verification_code.require' => '请输入数字验证码!'
+            'username.require'          => 'Please enter your account!',
+            'password.require'          => 'Please enter your password!',
+            'verification_code.require' => 'Please enter the verification code!'
         ]);
 
         $data = $this->request->param();
@@ -230,7 +230,7 @@ class PublicController extends RestBaseController
         } else if (cmf_check_mobile($data['username'])) {
             $userWhere['mobile'] = $data['username'];
         } else {
-            $this->error("请输入正确的手机或者邮箱格式!");
+            $this->error('Please enter the correct mobile number or email address!');
         }
 
         $errMsg = cmf_check_verification_code($data['username'], $data['verification_code']);
@@ -241,7 +241,7 @@ class PublicController extends RestBaseController
         $userPass = cmf_password($data['password']);
         Db::name("user")->where($userWhere)->update(['user_pass' => $userPass]);
 
-        $this->success("密码重置成功,请使用新密码登录!");
+        $this->success('successful');
 
     }
 }

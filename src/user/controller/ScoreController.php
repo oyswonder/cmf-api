@@ -26,7 +26,7 @@ class ScoreController extends RestUserBaseController
             ->order('create_time DESC')
             ->paginate();
 
-        $this->success('请求成功', ['list' => $logs->items()]);
+        $this->success('Request successful', ['list' => $logs->items()]);
     }
 
 }

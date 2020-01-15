@@ -37,9 +37,9 @@ class CommentsController extends RestBaseController
             $response = ['list' => $data];
         }
         if ($data->isEmpty()) {
-            $this->error('暂无评论！');
+            $this->error('No comment!');
         }
-        $this->success('请求成功', $response);
+        $this->success('Request successful', $response);
 
     }
 
@@ -53,10 +53,10 @@ class CommentsController extends RestBaseController
     {
         $param = $this->request->param();
         if (empty($param['object_id'])) {
-            $this->error('object_id参数不存在');
+            $this->error('Parameter object_id dose not exist!');
         }
         if (empty($param['table_name'])) {
-            $this->error('table_name参数不存在');
+            $this->error('Parameter table_name dose not exist!');
         }
 
         $commentService = new CommentService();
@@ -71,9 +71,9 @@ class CommentsController extends RestBaseController
         }
         //数据是否存在
         if ($data->isEmpty()) {
-            $this->error('评论数据为空');
+            $this->error('No comment!');
         } else {
-            $this->success('评论获取成功!', $response);
+            $this->success('Successful!', $response);
         }
     }
 
@@ -87,14 +87,14 @@ class CommentsController extends RestBaseController
         if (!empty($input['id'])) {
             $id = intval($input['id']);
         } else {
-            $this->error('id参数不存在');
+            $this->error('Parameter error!');
         }
         $userId = $this->getUserId();
         $result = CommentModel::destroy(['id' => $id, 'user_id' => $userId]);
         if ($result) {
-            $this->success('删除成功！');
+            $this->success('Deleted successfully!');
         } else {
-            $this->error('删除失败！');
+            $this->error('failure');
         }
     }
 
@@ -109,9 +109,9 @@ class CommentsController extends RestBaseController
         $data = $this->_setComments();
         $res  = CommentModel::setComment($data);
         if ($res) {
-            $this->success('评论成功', $res);
+            $this->success('success', $res);
         } else {
-            $this->error('评论失败');
+            $this->error('failure');
         }
     }
 
@@ -128,22 +128,22 @@ class CommentsController extends RestBaseController
         if (!empty($input['object_id'])) {
             $data['object_id'] = $input['object_id'];
         } else {
-            $this->error('object_id参数不存在');
+            $this->error('Parameter object_id dose not exist!');
         }
         if (!empty($input['table_name'])) {
             $data['table_name'] = $input['table_name'];
         } else {
-            $this->error('table_name参数不存在');
+            $this->error('Parameter table_name dose not exist!');
         }
         if (!empty($input['url'])) {
             $data['url'] = $input['url'];
         } else {
-            $this->error('url参数不存在');
+            $this->error('Parameter url dose not exist!');
         }
         if (!empty($input['content'])) {
             $data['content'] = $input['content'];
         } else {
-            $this->error('内容不为空');
+            $this->error('Content cannot be empty!');
         }
 
         $data['parent_id'] = $this->request->has('parent_id') ? $input['parent_id'] : 0;
@@ -167,7 +167,7 @@ class CommentsController extends RestBaseController
                 $data['path']       = $res['path'] . $data['parent_id'] . ',';
                 $data['to_user_id'] = $res['user_id'];
             } else {
-                $this->error('回复的评论不存在');
+                $this->error('Comment does not exist!');
             }
         } else {
             $data['path'] = '0,';
@@ -176,7 +176,7 @@ class CommentsController extends RestBaseController
         $userModel       = new UserModel();
         $userData        = $userModel->find($data['user_id']);
         if (!$userData) {
-            $this->error('评论用户不存在');
+            $this->error('User does not exist');
         }
 
         $data['full_name'] = $userData['user_nickname'];
