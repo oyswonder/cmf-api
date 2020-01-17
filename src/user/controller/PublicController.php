@@ -151,7 +151,7 @@ class PublicController extends RestBaseController
             ->where('device_type', $this->deviceType)
             ->find();
         $currentTime    = time();
-        $expireTime     = $currentTime + 24 * 3600 * 180;
+        $expireTime     = $currentTime + 86400;
         $token          = md5(uniqid()) . md5(uniqid());
         if (empty($findUserToken)) {
             $result = Db::name("user_token")->insert([
